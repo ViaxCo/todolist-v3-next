@@ -11,6 +11,7 @@ import { Link, Spinner, useColorMode } from "@chakra-ui/react";
 import { motion } from "framer-motion";
 import { useRouter } from "next/router";
 import NextLink from "next/link";
+import Head from "next/head";
 
 const List = () => {
   // Get the url parameter (/:customListName) value
@@ -20,13 +21,16 @@ const List = () => {
   const { colorMode } = useColorMode();
 
   const dispatch = useDispatch();
-  const { listIsLoading } = useSelector((state: State) => state.items);
+  const { listIsLoading, listTitle } = useSelector((state: State) => state.items);
 
   useEffect(() => {
     if (customListName) dispatch(getItems(customListName));
   }, [dispatch, customListName]);
   return (
     <>
+      <Head>
+        <title>{listIsLoading ? "Todo List" : listTitle}</title>
+      </Head>
       {/* Show spinner when fetching Items */}
       {listIsLoading ? (
         <Spinner
