@@ -2,7 +2,6 @@ import {
   Box,
   Divider,
   Heading,
-  Image,
   Text,
   useColorMode,
   useColorModeValue,
@@ -10,6 +9,7 @@ import {
 import Footer from "../components/Footer";
 import ColorModeButton from "../components/ColorModeButton";
 import { motion } from "framer-motion";
+import Image from "next/image";
 
 const About = () => {
   // useColorMode for color mode check and toggle
@@ -67,7 +67,9 @@ const About = () => {
             initial={{ opacity: 0, transform: "scale(0)" }}
             animate={colorMode === "light" ? "light" : "dark"}
           ></motion.div>
-          <Image src="/avatar.png" alt="Avatar" mt="30px" />
+          <Box mt="30px">
+            <Image src="/avatar.png" alt="Avatar" width={200} height={200} />
+          </Box>
           <Text
             p="20px"
             fontSize="1.2rem"
