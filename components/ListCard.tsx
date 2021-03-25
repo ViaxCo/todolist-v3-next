@@ -68,7 +68,7 @@ const ListCard = ({ list, i }: Props) => {
           alignItems="center"
         >
           {/* Combine react-router-dom Link and @chakra-ui Link props together */}
-          <NextLink href={{ pathname: `/${list.name}` }}>
+          <NextLink href={{ pathname: `/${list.name}` }} passHref>
             <Link
               flex="1"
               textAlign="center"

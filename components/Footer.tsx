@@ -21,11 +21,11 @@ const Footer = () => {
     >
       &copy; Created by{" "}
       {pathname === "/about" ? (
-        <NextLink href="/">
+        <NextLink href="/" passHref>
           <Link textDecoration="underline">ViaxCo</Link>
         </NextLink>
       ) : (
-        <NextLink href="/about">
+        <NextLink href="/about" passHref>
           <Link textDecor="underline" onClick={() => dispatch(setHomeIsLoading(true))}>
             ViaxCo
           </Link>

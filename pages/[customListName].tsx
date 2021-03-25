@@ -53,7 +53,7 @@ const List = () => {
               duration: 0.2,
             }}
           >
-            <NextLink href="/">
+            <NextLink href="/" passHref>
               <Link
                 style={{ textDecoration: "none" }}
                 onClick={() => dispatch(setHomeIsLoading(true))}
