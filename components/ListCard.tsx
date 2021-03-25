@@ -5,7 +5,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import {
   Box,
   Flex,
-  HTMLChakraProps,
+  FlexProps,
   IconButton,
   Link,
   Text,
@@ -20,10 +20,9 @@ type Props = {
   i: number;
 };
 
-// type Merge<P, T> = Omit<P, keyof T> & T;
-// type MotionFlexProps = Merge<HTMLChakraProps<"div">, HTMLMotionProps<"div">>;
-// export const MotionFlex: React.FC<MotionFlexProps> = motion(Flex);
-export const MotionFlex = motion(Flex);
+type Merge<P, T> = Omit<P, keyof T> & T;
+type MotionFlexProps = Merge<FlexProps, HTMLMotionProps<"div">>;
+export const MotionFlex: React.FC<MotionFlexProps> = motion(Flex);
 
 const ListCard = ({ list, i }: Props) => {
   const dispatch = useDispatch();
@@ -62,7 +61,12 @@ const ListCard = ({ list, i }: Props) => {
         exit="exit"
         custom={i}
       >
-        <Box w={{ base: "82%", md: "83%" }} cursor="pointer" display="flex" alignItems="center">
+        <Box
+          w={{ base: "82%", md: "83%" }}
+          cursor="pointer"
+          display="flex"
+          alignItems="center"
+        >
           {/* Combine react-router-dom Link and @chakra-ui Link props together */}
           <NextLink href={{ pathname: `/${list.name}` }}>
             <Link

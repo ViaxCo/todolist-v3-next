@@ -1,11 +1,10 @@
-import { IconButton, useColorMode, HTMLChakraProps } from "@chakra-ui/react";
+import { IconButton, useColorMode, IconButtonProps } from "@chakra-ui/react";
 import { MoonIcon, SunIcon } from "@chakra-ui/icons";
 import { motion, HTMLMotionProps, useCycle } from "framer-motion";
 
-// type Merge<P, T> = Omit<P, keyof T> & T;
-// type MotionButtonProps = Merge<HTMLChakraProps<"button">, HTMLMotionProps<"button">>;
-// const MotionIconButton: React.FC<MotionButtonProps> = motion(IconButton);
-const MotionIconButton = motion(IconButton);
+type Merge<P, T> = Omit<P, keyof T> & T;
+type MotionButtonProps = Merge<IconButtonProps, HTMLMotionProps<"button">>;
+const MotionIconButton: React.FC<MotionButtonProps> = motion(IconButton);
 
 const ColorModeButton = () => {
   // useColorMode for color mode check and toggle
