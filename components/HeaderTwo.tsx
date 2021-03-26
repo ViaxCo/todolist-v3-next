@@ -1,14 +1,10 @@
-import { Box, Heading, HStack, useColorMode, useColorModeValue } from "@chakra-ui/react";
+import { Box, Heading, HStack, useColorModeValue } from "@chakra-ui/react";
 import ColorModeButton from "./ColorModeButton";
-import { motion } from "framer-motion";
+import Blender from "./Blender";
+import { useRouter } from "next/router";
 
-type Props = {
-  customListName?: string;
-};
-
-const HeaderTwo = ({ customListName }: Props) => {
-  // useColorMode for color mode check and toggle
-  const { colorMode } = useColorMode();
+const HeaderTwo = () => {
+  const { pathname } = useRouter();
   // Custom css value depending on the color mode
   // useColorModeValue("light", "dark")
   const boxShadow = useColorModeValue(
@@ -28,26 +24,10 @@ const HeaderTwo = ({ customListName }: Props) => {
     >
       <HStack spacing={4}>
         <Heading color={useColorModeValue("main.blue", "white")} fontSize="1.5rem">
-          Your {customListName ? "Items" : "Lists"}
+          Your {pathname === "/" ? "Lists" : "Items"}
         </Heading>
         <ColorModeButton />
-        <motion.div
-          className="blender main"
-          variants={{
-            light: {
-              transform: "scale(0)",
-              opacity: 0.5,
-              transition: { ease: "easeInOut", duration: 0.4 },
-            },
-            dark: {
-              transform: "scale(60)",
-              opacity: 0,
-              transition: { ease: "easeInOut", duration: 0.6 },
-            },
-          }}
-          initial={{ opacity: 0, transform: "scale(0)" }}
-          animate={colorMode === "light" ? "light" : "dark"}
-        ></motion.div>
+        <Blender className="main" />
       </HStack>
     </Box>
   );

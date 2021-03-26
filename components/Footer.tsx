@@ -1,16 +1,16 @@
-import { useDispatch } from "react-redux";
+import { useAppDispatch } from "../redux/hooks";
 import { setHomeIsLoading } from "../redux/features/lists/listsSlice";
-import { Box, Link } from "@chakra-ui/react";
+import { Link } from "@chakra-ui/react";
 import NextLink from "next/link";
 import { useRouter } from "next/router";
+import MyBox from "./MyBox";
 
 const Footer = () => {
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const { pathname } = useRouter();
   return (
-    <Box
+    <MyBox
       as="footer"
-      className="box"
       boxShadow="5px 5px 15px -5px rgba(0, 0, 0, 0.3)"
       bg="main.blue"
       color="white"
@@ -31,7 +31,7 @@ const Footer = () => {
           </Link>
         </NextLink>
       )}
-    </Box>
+    </MyBox>
   );
 };
 

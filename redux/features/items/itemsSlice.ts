@@ -1,51 +1,67 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 import { AppDispatch } from "../../store";
 
 // Item type
-export type Item = {
+export type ItemType = {
   _id?: string;
   task: string;
   completed: boolean;
 };
 
 // Slice state
-export type ItemSlice = {
-  items: Item[];
+type ItemSliceState = {
+  items: ItemType[];
   listTitle: string;
   listIsLoading: boolean;
-  adding: boolean;
 };
+
+const initialState: ItemSliceState = {
+  items: [],
+  listTitle: "",
+  listIsLoading: true,
+};
+
+export const addItem = createAsyncThunk(
+  "items/addItem",
+  async ({ customListName, name }: { customListName: string; name: string }) => {
+    const res = await axios.post(
+      `/api/${customListName}`,
+      { text: name },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    const { item } = res.data;
+    return item as ItemType;
+  }
+);
 
 const itemsSlice = createSlice({
   name: "items",
-  initialState: {
-    items: [] as Item[],
-    listTitle: "",
-    listIsLoading: true,
-    adding: null as boolean | null,
-  } as ItemSlice,
+  initialState,
   reducers: {
     itemsReceived(state, { payload: { items, listTitle } }) {
       state.listIsLoading = false;
-      state.items = items as Item[];
-      state.listTitle = listTitle as string;
-    },
-    itemAdded(state, { payload: item }) {
-      state.items.push(item);
+      state.items = items;
+      state.listTitle = listTitle;
     },
     itemDeleted(state, { payload: id }) {
       state.items = state.items.filter(item => item._id !== id);
     },
     itemCompletedToggled(state, { payload: { item, index } }) {
-      state.items[index] = item as Item;
+      state.items[index] = item;
     },
     setListIsLoading(state, { payload: value }) {
-      state.listIsLoading = value as boolean;
+      state.listIsLoading = value;
     },
-    setAdding(state, action) {
-      state.adding = action.payload as boolean;
-    },
+  },
+  extraReducers: builder => {
+    builder.addCase(addItem.fulfilled, (state, { payload: item }) => {
+      state.items.push(item);
+    });
   },
 });
 
@@ -55,22 +71,9 @@ export const getItems = (customListName: string) => async (dispatch: AppDispatch
   dispatch(itemsReceived({ items, listTitle }));
 };
 
-export const addItem = (customListName: string, name: string) => async (dispatch: AppDispatch) => {
-  const res = await axios.post(
-    `/api/${customListName}`,
-    { text: name },
-    {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    }
-  );
-  const { item } = res.data;
-  dispatch(itemAdded(item));
-  dispatch(setAdding(false));
-};
-
-export const deleteItem = (customListName: string, id: string) => async (dispatch: AppDispatch) => {
+export const deleteItem = (customListName: string, id: string) => async (
+  dispatch: AppDispatch
+) => {
   dispatch(itemDeleted(id));
   await axios.delete(`/api/${customListName}?id=${id}`);
 };
@@ -84,17 +87,15 @@ export const toggleItemCompleted = (
   const res = await axios.patch(`/api/${customListName}?id=${id}`, {
     completed: checked,
   });
-  const items: Item[] = res.data.items;
+  const items: ItemType[] = res.data.items;
   const item = items.find(item => item._id === id);
   dispatch(itemCompletedToggled({ item, index }));
 };
 
 export const {
   itemsReceived,
-  itemAdded,
   itemDeleted,
   itemCompletedToggled,
   setListIsLoading,
-  setAdding,
 } = itemsSlice.actions;
 export default itemsSlice.reducer;

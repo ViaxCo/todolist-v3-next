@@ -1,12 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
-import listsReducer, { ListSlice } from "./features/lists/listsSlice";
-import itemsReducer, { ItemSlice } from "./features/items/itemsSlice";
-
-// State type
-export type State = {
-  lists: ListSlice;
-  items: ItemSlice;
-};
+import listsReducer from "./features/lists/listsSlice";
+import itemsReducer from "./features/items/itemsSlice";
 
 const store = configureStore({
   reducer: {
@@ -15,5 +9,6 @@ const store = configureStore({
   },
 });
 
+export type RootState = ReturnType<typeof store.getState>;
 export type AppDispatch = typeof store.dispatch;
 export default store;

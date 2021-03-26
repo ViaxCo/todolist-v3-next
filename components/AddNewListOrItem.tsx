@@ -1,25 +1,27 @@
-import { useDispatch, useSelector } from "react-redux";
-import { addItem, setListIsLoading, setAdding } from "../redux/features/items/itemsSlice";
+import { useAppDispatch } from "../redux/hooks";
+import { addItem, setListIsLoading } from "../redux/features/items/itemsSlice";
 import { addList } from "../redux/features/lists/listsSlice";
 import { ChangeEvent, FormEvent, useState } from "react";
 import { AddIcon } from "@chakra-ui/icons";
-import { Flex, FormControl, IconButton, Input, useColorModeValue, Spinner } from "@chakra-ui/react";
-import { State } from "../redux/store";
+import {
+  Flex,
+  FormControl,
+  IconButton,
+  Input,
+  useColorModeValue,
+  Spinner,
+} from "@chakra-ui/react";
 
 type Props = {
   customListName?: string;
 };
 
 const AddNewListOrItem = ({ customListName }: Props) => {
-  const dispatch = useDispatch();
-
   const [value, setValue] = useState("");
-  const { adding } = useSelector((state: State) => state.items);
+  const [adding, setAdding] = useState(false);
+  const dispatch = useAppDispatch();
 
-  // Control the value of the input component
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value);
-
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     // If on the home page
     if (!customListName) {
@@ -28,30 +30,37 @@ const AddNewListOrItem = ({ customListName }: Props) => {
     }
     // If on the individual lists page
     if (customListName) {
-      dispatch(setAdding(true));
+      setAdding(true);
       setValue("");
-      dispatch(addItem(customListName, value));
-      // setAdding(false) inside the addItem function
+      await dispatch(addItem({ customListName, name: value }));
+      setAdding(false);
     }
   };
 
   return (
-    <Flex as="form" method="post" onSubmit={handleSubmit} align="center" minH="70px" ml="10px">
+    <Flex
+      as="form"
+      method="post"
+      onSubmit={handleSubmit}
+      align="center"
+      minH="70px"
+      ml="10px"
+    >
       <FormControl>
         <Input
           textAlign="center"
           height="50px"
           w={{ base: "80%", md: "85%" }}
           border="none"
-          borderRadius={0}
+          borderRadius="0"
           bg="transparent"
           fontSize="1.2rem"
-          fontWeight={400}
+          fontWeight="400"
           color={useColorModeValue("main.blue", "white")}
           name="text"
           type="text"
           value={value}
-          onChange={handleChange}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setValue(e.target.value)}
           isRequired={true}
           autoComplete="off"
           placeholder={customListName ? "New Item" : "New List"}
@@ -75,6 +84,7 @@ const AddNewListOrItem = ({ customListName }: Props) => {
           minH="50px"
           colorScheme="viaxco"
           icon={adding ? <Spinner /> : <AddIcon />}
+          disabled={adding}
         />
       </FormControl>
     </Flex>
