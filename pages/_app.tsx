@@ -26,7 +26,11 @@ const SwrWrapper = ({ children }: { children: ReactNode }) => {
     const res = await axios.get(url);
     return res.data;
   };
-  return <SWRConfig value={{ onError, fetcher }}>{children}</SWRConfig>;
+  return (
+    <SWRConfig value={{ onError, fetcher, revalidateOnFocus: false }}>
+      {children}
+    </SWRConfig>
+  );
 };
 
 const MyApp = ({ Component, pageProps }: AppProps) => {
