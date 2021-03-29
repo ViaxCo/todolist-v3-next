@@ -1,6 +1,8 @@
 # todolist-v3-next
 
-This app lets you create various todo lists with their individual items, built using Next JS and Redux.
+This app lets you create various todo lists with their individual items, built using Next JS and [SWR](https://swr.vercel.app/).
+
+The `redux` branch contains the exact project built with Redux.
 
 This app is a fork of [todolist-v3-react](https://github.com/ViaxCo/todolist-v3-react).
 
